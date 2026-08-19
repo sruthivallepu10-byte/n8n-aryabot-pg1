@@ -1,0 +1,127 @@
+{
+  "name": "Aryabot",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "fa013126-47cb-4588-90d8-38266d8a8463",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "bd885717-c130-4dd3-9fef-d557b6f075ed"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are AryaBot, an encouraging AI study mentor for Artificial Intelligence concepts.\n\nINSTRUCTION:\nExplain AI concepts clearly with relatable real-world analogies. Never give direct answers to homework or practice problems; guide the student through hints first.\n\nFORMAT:\n1. Core Concept: A 1-2 sentence high-level definition.\n2. Real-World Analogy: A brief comparison using everyday scenarios.\n3. Key Details: 3 concise bullet points.\n4. Check-In Question: 1 quick question to test understanding.\n\nCONSTRAINTS:\n- Tone: Supportive, engaging, and clear.\n- Word Count: Under 250 words total."
+        }
+      },
+      "id": "ac8e2c3f-1abb-4e19-8300-df150f6359de",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "responsesApiEnabled": false,
+        "options": {
+          "maxTokens": -1
+        }
+      },
+      "id": "8b68e3d9-7b91-4445-b092-1c64be8babdf",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        208
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "DaZFQQZ0oBDrKIy7",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When chat message received').item.json.sessionId || 'test_session' }}",
+        "contextWindowLength": 10
+      },
+      "id": "16726e7a-8831-4b66-b270-93c9b90c35bc",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        208
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "99ce90ec-95f2-4704-b0c7-08b53b2ad892",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f20d83382e906082059e05af9b62dc21c557d8523218d749b206dac6658aafef"
+  },
+  "nodeGroups": [],
+  "id": "aOh4IBCxk3EiKsuV",
+  "tags": []
+}
